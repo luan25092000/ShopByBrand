@@ -1,0 +1,60 @@
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Featured\Index\Listing
+ */
+?>
+<?php
+$brandUrl = $block->getBrandUrl();
+$imageUrl = $block->getImageUrl();
+$allBrand = $block->getAllBrand();
+$show = $block->getBrandConfig();
+
+$title = $block->getTitleBrand();
+?>
+<?php if ($allBrand) : ?>
+    <?php if ($title) : ?>
+        <h3><?php echo $title ?></h3>
+    <?php endif; ?>
+    <div class="mn-brand-carousel">
+        <div class="owl-carousel featured-brand" data-margin="10"
+             data-responsive='{"0":{"items":1},"600":{"items":2},"992":{"items":3}}'
+             data-autoplayTimeout="600" data-autoplay="false"
+             data-loop="<?php echo count($allBrand) > 4 ? true : false ?>">
+            <?php foreach ($allBrand as $brand) : ?>
+                <div class="mn-item">
+                    <?php if ($show == 1) : ?>
+                        <a href='<?php echo $brandUrl . '/' . $brand['url_key'] ?>'>
+                            <span class="brand-name"><?php echo $brand['name'] ?></span>
+                            <img class="brand-img" src='<?php echo $block->getImage($brand) ?>'
+                                 alt='<?php echo $brand['name'] ?>' title='<?php echo $brand['name'] ?>'>
+                        </a>
+                        <p class="brand-short-description">
+                           <?=$brand['short_description_hover']?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<script>
+    require([
+        'jquery',
+        'Magenest_ShopByBrand/js/owl.carousel'
+    ], function ($) {
+        $(".mn-brand-carousel .featured-brand").each(function (index, el) {
+            var check = <?php echo(count($allBrand) > 4 ? "true" : "false")?>;
+            var config = $(this).data();
+            if (check === true) {
+                config.nav = true;
+            }
+            config.navText = ['', ''];
+            config.dots = true;
+            config.smartSpeed = "800";
+            $(this).owlCarousel(config);
+        });
+    });
+</script>

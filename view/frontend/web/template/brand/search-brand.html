@@ -1,0 +1,26 @@
+<div class="search-brands">
+    <div class="search-box">
+        <h5 data-bind="i18n: 'Find a Brand'"></h5>
+        <input id="brandsearch" data-bind="attr: {placeholder: 'Search brand here'}" autocomplete="off" autocorrect="off"
+               autofocus="autofocus">
+        <button class="btn-search primary action change-backgroundcolor">Search</button>
+    </div>
+    <div class="filter-group">
+        <h5 data-bind="i18n: 'Filter as groups'"></h5>
+        <select name="filter_brand_group",id="filter_brand_group",
+                data-bind="
+                value:selectedGroup,
+                options: showGroupBrandId(),
+                optionsValue: 'value',
+                optionsText: 'label',
+                event: {change: onChange}
+                ">
+        </select>
+    </div>
+</div>
+<div id="searchbrands" class="mn-view-list mn-view-list_style1">
+    <div class="mn-items">
+        <div id="searchbrand" class="mn-items-content">
+        </div>
+    </div>
+</div>

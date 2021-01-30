@@ -1,0 +1,14 @@
+<script>
+    function showProduct(){
+        require(['jquery'],function($){
+            $('#magenest_brand_product_filter_in_brand').val("1");
+        <?php echo $block->getJsObjectName(). '.doFilter()' ?>
+        });
+    }
+    function addProduct(){
+        require(['jquery'],function($){
+            $('#magenest_brand_product_filter_in_brand').val("0");
+        <?php echo $block->getJsObjectName(). '.doFilter()' ?>
+        });
+    }
+</script>

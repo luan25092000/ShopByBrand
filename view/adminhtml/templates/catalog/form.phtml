@@ -1,0 +1,127 @@
+<?php
+/**
+ *
+ * @var $block Magenest\ShopByBrand\Block\Adminhtml\Brand\Edit\Form
+ */
+?>
+<?php echo $block->getBrandTabsHtml(); ?>
+<form id="edit_form" name="category-edit-form" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post"
+      enctype="multipart/form-data">
+    <div class="no-display">
+        <input type="hidden" name="isIframe" value="1"/>
+        <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>"/>
+        <input type="hidden" name="brand_products" id="in_brand_products" value=""/>
+        <input type="hidden" name="related_brand" id="in_related_brand" value=""/>
+        <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
+    </div>
+    <div id="brand_tab_content"></div>
+</form>
+
+
+<script>
+    <?php if (($blockGrid = $block->getLayout()->getBlock('brand.tab.products')) && ($_gridJsObject = $blockGrid->getJsObjectName())) : ?>
+    require([
+        "mage/adminhtml/grid"
+    ], function(){
+        function postionValue(){
+            var postion_value = document.getElementsByClassName("admin__grid-control-value");
+            for (var i = 0; i < postion_value.length; i++) {
+                postion_value[i].hidden = true;
+            }
+        }
+        var categoryProducts = $H(<?php   echo $block->getProductsJson() ?>);
+        $('in_brand_products').value = Object.toJSON(categoryProducts);
+
+        function registerCategoryProduct(grid, element, checked){
+            if(checked){
+                if(element.positionElement) {
+                    element.positionElement.disabled = false;
+                    categoryProducts.set(element.value, element.positionElement.value);
+                }
+            }
+            else{
+                if(element.positionElement){
+                    element.positionElement.disabled = true;
+                }
+                categoryProducts.unset(element.value);
+            }
+            $('in_brand_products').value = Object.toJSON(categoryProducts);
+            grid.reloadParams = {'selected_products[]':categoryProducts.keys()};
+            postionValue();
+        }
+        function categoryProductRowClick(grid, event){
+            var trElement = Event.findElement(event, 'tr');
+            var isInput   = Event.element(event).tagName == 'INPUT';
+            if(trElement){
+                var checkbox = Element.getElementsBySelector(trElement, 'input');
+                if(checkbox[0]){
+                    var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                    <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
+                }
+            }
+            postionValue();
+        }
+        function positionChange(event){
+            var element = Event.element(event);
+            if(element && element.checkboxElement && element.checkboxElement.checked){
+                categoryProducts.set(element.checkboxElement.value, element.value);
+                $('in_brand_products').value = Object.toJSON(categoryProducts);
+            }
+        }
+
+        var tabIndex = 1000;
+        function categoryProductRowInit(grid, row){
+            var checkbox = $(row).getElementsByClassName('checkbox')[0];
+            var position = $(row).getElementsByClassName('input-text')[0];
+            if(checkbox && position){
+                checkbox.positionElement = position;
+                position.checkboxElement = checkbox;
+                position.disabled = !checkbox.checked;
+                position.tabIndex = tabIndex++;
+                Event.observe(position,'keyup',positionChange);
+            }
+            postionValue();
+        }
+
+        <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
+        <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
+        <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
+        if(<?php /* @escapeNotVerified */ echo $_gridJsObject ?>.rows) {
+            <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php /* @escapeNotVerified */ echo $_gridJsObject ?>, row)});
+        }
+    });
+    <?php endif; ?>
+    <?php if (($blockGrid = $block->getLayout()->getBlock('brand.tab.related_brand')) && ($_gridJsObject = $blockGrid->getJsObjectName())) : ?>
+    require([
+        "mage/adminhtml/grid"
+    ], function() {
+        var relatedBrands = $H(<?php echo $block->getRelatedBrandJson() ?>);
+        $('in_related_brand').value = Object.toJSON(relatedBrands);
+
+        function registerBrands(grid, element, checked) {
+            if (checked) {
+                if (element.className != "admin__control-checkbox") {
+                    relatedBrands.set(element.value, element.value);
+                }
+            } else {
+                relatedBrands.unset(element.value);
+            }
+            $('in_related_brand').value = Object.toJSON(relatedBrands);
+        }
+
+        function relatedBrandRowClick(grid, event) {
+            var trElement = Event.findElement(event, 'tr');
+            var isInput   = Event.element(event).tagName == 'INPUT';
+            if (trElement) {
+                var checkbox = Element.getElementsBySelector(trElement, 'input');
+                if (checkbox[0]) {
+                    var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                    <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
+                }
+            }
+        }
+        <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.rowClickCallback = relatedBrandRowClick;
+        <?php /* @escapeNotVerified */ echo $_gridJsObject ?>.checkboxCheckCallback = registerBrands;
+    });
+    <?php endif; ?>
+</script>

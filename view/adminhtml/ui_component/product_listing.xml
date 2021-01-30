@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="product_columns">
+        <column name="brand_id" component="Magento_Ui/js/grid/columns/select"
+                class="Magenest\ShopByBrand\Ui\Component\Listing\Columns\RelatedProduct">
+            <settings>
+                <options class="Magenest\ShopByBrand\Model\ListBrand"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Brand</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>

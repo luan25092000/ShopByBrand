@@ -1,0 +1,344 @@
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Brand\Index\Listing
+ */
+?>
+<?php
+$router = $block->getRouter();
+$getBrandUrl = $block->getBrandUrl();
+$baseMediaUrl = $block->getBaseMediaUrl();
+$baseStaticUrl = $block->getBaseStaticUrl();
+$allBrands = $block->getAllBrand();
+$showTotalProduct = $block->getShowTotalBrandProduct();
+$baseUrl = $block->getStaticUrl();
+$allBrandUseJs = $block->getAllBrandUseJs();
+?>
+
+<div class="search-brands">
+    <div class="search-box">
+        <h5><?= __('Find a brand') ?></h5>
+        <input id="brandsearch" placeholder="<?= __('Search brand here') ?>" autocomplete="off" autocorrect="off" type="text">
+        <button class="btn-search primary action change-backgroundcolor" id="brandlist-search"><?= __('Search') ?></button>
+    </div>
+    <div class="filter-group">
+        <h5><?= __('Filter as groups') ?></h5>
+        <select name="filter_brand_group" id="filter_brand_group">
+            <option value="all" selected>All</option>
+            <?php foreach ($block->getGroupBrandId() as $item): ?>
+                <option value="<?= $item['group_id'] ?>"><?= $item['name'] ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+<div id="searchbrands" class="mn-view-list mn-view-list_style1">
+    <div class="mn-items">
+        <div class="search-result-title" style="display: none;"> <span><?= __("Search results") ?></span> </div>
+        <div id="searchbrand" class="mn-items-content" style="display: none;">
+            <strong class="filled-out">Key must be filled out</strong>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var searchWidth = 35;
+    var brands = [<?php foreach ($allBrandUseJs as $allBrand) {
+    echo '{"n":"' . $allBrand['name'] . '","k":"' . $allBrand['url_key'] . '","i":"' . $allBrand['logo'] . '"},';
+} ?>];
+
+    require(['jquery'], function ($) {
+        $(".filled-out").hide();
+        $("#searchbrands .search-result-title").hide();
+        $('#brandsearch').on("input", null, null, function (el) {
+            var vsearch = document.getElementById('brandsearch').value.trim();
+            var html = '';
+            $('#searchbrands').trigger('processStart');
+            $('#searchbrand').show();
+            $('#searchbrand').html('');
+            if (vsearch == '') {
+                $('#searchbrands').trigger('processStop');
+                $('#searchbrand').hide();
+                $("#searchbrands .search-result-title").hide();
+            } else {
+                setTimeout(function () {
+                    $('#searchbrands').trigger('processStop');
+                    $('#searchbrand').html('');
+                    if (vsearch.length > 0 && vsearch !== ' ') {
+                        $("#searchbrands .search-result-title").show();
+                        var count = 1;
+                        for (var i = 0; i < brands.length; i++) {
+                            if (brands[i].n.toLowerCase().search(el.target.value.toLowerCase().trim()) != -1) {
+                                count++;
+                                if (brands[i].i != "") {
+                                    html += "<div class='mn-item '>" +
+                                        "<a href=<?php echo $getBrandUrl ?>" + brands[i].k + " >" +
+                                        "<img class='brand-img' src='" + brands[i].i + " ' alt=brands[i].n /> <span class='brand-name'>" +
+                                        "" + brands[i].n +
+                                        "</span></a> </div>";
+                                } else {
+                                    html += "<div class='mn-item '>" +
+                                        "<a href=<?php echo $getBrandUrl ?>" + brands[i].k + " >" +
+                                        "<img class='brand-img' src='<?php echo $baseStaticUrl . \Magenest\ShopByBrand\Model\Config\Router::ROUTER_STATIC?>'/> <span class='brand-name'>" +
+                                        "" + brands[i].n +
+                                        "</span></a> </div>";
+                                }
+                                if (count === 4){
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (count == 1) {
+                        $(".filled-out").hide();
+                        $(".special-character").hide();
+                        $('#searchbrand').append('<strong>There is no any result match input value</strong>');
+                    }else if(count === 4){
+                        html+="<div class='load-item-container'><a id='load-item'>See all results</a></div>";
+                    }
+                    $('#searchbrand').append(html);
+                }, 400);
+            }
+        });
+        $("#filter_brand_group").change(function (){
+            $("#brandlist-title").text("<?= $block->getTitleListBrand(); ?>");
+            var id = $("select option:selected").val();
+            groupId(id);
+        });
+        $(document).on("click", "#brandlist-search", function(){
+            $("#searchbrands .search-result-title").hide();
+            var key = $("#brandsearch").val();
+            var url = "<?= $baseUrl . $block->getRouteFrontName() ?>/brand/filter";
+            var alpha = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var rev = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            var isSortOrderListBrand = <?=$block->isSortOrderListBrand()?>;
+            var isShowTotalProduct = <?= $showTotalProduct; ?>;
+            var isShow = <?= $block->showBrandList(); ?>;
+            var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+            if(key===""){
+                $(".filled-out").show();
+                return false;
+            }
+            else if(format.test(key)){
+                $(".filled-out").hide();
+                $(".match-character").text("Key does not contain special character");
+                return false;
+            }
+            $.ajax({
+                url: url,
+                data: {key: key},
+                showLoader: true,
+                cache: false,
+                success: function (response) {
+                    var data = response;
+                    var result = '';
+                    if(data.length!==0){
+                        for (var j = 0; j < data.length; j++) {
+                            var linkPage = '<?= $getBrandUrl ?>' + data[j].url_key;
+                            var imgUrl = data[j].logo;
+                            var brandName = data[j].name;
+                            var summary = data[j].summary;
+                            if (isShow == 1) {
+                                result += "<div class='mn-item'>";
+                                result += "<a href=" + linkPage + ">";
+                                result += "<img src='"+ imgUrl +"' alt='" + brandName + "' title='" + brandName + "' class='brand-img' />";
+                                result += "<span class='brand-name'>" + brandName;
+                                if (isShowTotalProduct) {
+                                    result += "(" + summary + ")";
+                                }
+                                result += "</span></a></div>";
+                            }
+                            if(isSortOrderListBrand == 0){
+                                for (var i = 0; i < alpha.length; i++) {
+                                    var check = onCheckFirstBrand(alpha[i],data);
+                                    if (check == true) {
+                                        if (isShow == 0) {
+                                            result += "<div class='mn-item'>";
+                                            result += "<div class='mn-item-title'>" + alpha[i] + "</div>";
+                                            for(var j = 0;j<data.length;j++){
+                                                var load = getBrandsStyle(data[j].name, alpha[i]);
+                                                if (load === true) {
+                                                    result += "<div class='mn-item-child'>";
+                                                    result += "<a href="+'<?= $getBrandUrl ?>' + data[j].url_key+">";
+                                                    result += "<span class='brand-name brand-name-only'>"+data[j].name;
+                                                    if (isShowTotalProduct) {
+                                                        result += "(" + data[j].summary + ")";
+                                                    }
+                                                    result += "</span></a></div>";
+                                                }
+                                            }
+                                            result += "</div>";
+                                        }
+                                    }
+                                }
+                            }else{
+                                for (var i = 0; i < rev.length; i++) {
+                                    var check = onCheckFirstBrand(rev[i],data);
+                                    if (check == true) {
+                                        if (isShow == 0) {
+                                            result += "<div class='mn-item'>";
+                                            result += "<div class='mn-item-title'>" + rev[i] + "</div>";
+                                            for(var j = 0;j<data.length;j++){
+                                                var load = getBrandsStyle(data[j].name, rev[i]);
+                                                if (load === true) {
+                                                    result += "<div class='mn-item-child'>";
+                                                    result += "<a href="+'<?= $getBrandUrl ?>' + data[j].url_key+">";
+                                                    result += "<span class='brand-name brand-name-only'>"+data[j].name;
+                                                    if (isShowTotalProduct) {
+                                                        result += "(" + data[j].summary + ")";
+                                                    }
+                                                    result += "</span></a></div>";
+                                                }
+                                            }
+                                            result += "</div>";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else {
+                        result = "No result";
+                    }
+                    $(".mn-items-content").hide();
+                    $("#showAllBrandOther").hide();
+                    $("#brandlist-title").text("Search result for '"+key+"'");
+                    $("#showAllBrand").css({"display":"flex","flex":"wrap"});
+                    $("#showAllBrand").html(result);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+            $("#brandsearch").change(function(){
+                if($("#brandsearch").val()==""){
+                    $("#brandlist-title").text("<?= $block->getTitleListBrand(); ?>");
+                    $("#showAllBrand").hide();
+                    $("#showGroupBrand").hide();
+                    $("#showAllBrandOther").css({"display":"flex","flex":"wrap"});
+                }
+            });
+        });
+        $("#brandsearch").bind("enterKey",function(){
+            $("#searchbrands .search-result-title").hide();
+            var key = $("#brandsearch").val();
+            var url = "<?= $baseUrl . $block->getRouteFrontName() ?>/brand/filter";
+            var alpha = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var rev = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            var isSortOrderListBrand = <?=$block->isSortOrderListBrand()?>;
+            var isShowTotalProduct = <?= $showTotalProduct; ?>;
+            var isShow = <?= $block->showBrandList(); ?>;
+            var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+            if(key===""){
+                $(".filled-out").show();
+                return false;
+            }
+            else if(format.test(key)){
+                $(".filled-out").hide();
+                $(".match-character").text("Key does not contain special character");
+                return false;
+            }
+            $.ajax({
+                url: url,
+                data: {key: key},
+                showLoader: true,
+                cache: false,
+                success: function (response) {
+                    var data = response;
+                    var result = '';
+                    if(data.length!==0){
+                        for (var j = 0; j < data.length; j++) {
+                            var linkPage = '<?= $getBrandUrl ?>' + data[j].url_key;
+                            var imgUrl = data[j].logo;
+                            var brandName = data[j].name;
+                            var summary = data[j].summary;
+                            if (isShow == 1) {
+                                result += "<div class='mn-item'>";
+                                result += "<a href=" + linkPage + ">";
+                                result += "<img src='"+ imgUrl +"' alt='" + brandName + "' title='" + brandName + "' class='brand-img' />";
+                                result += "<span class='brand-name'>" + brandName;
+                                if (isShowTotalProduct) {
+                                    result += "(" + summary + ")";
+                                }
+                                result += "</span></a></div>";
+                            }
+                            if(isSortOrderListBrand == 0){
+                                for (var i = 0; i < alpha.length; i++) {
+                                    var check = onCheckFirstBrand(alpha[i],data);
+                                    if (check == true) {
+                                        if (isShow == 0) {
+                                            result += "<div class='mn-item'>";
+                                            result += "<div class='mn-item-title'>" + alpha[i] + "</div>";
+                                            for(var j = 0;j<data.length;j++){
+                                                var load = getBrandsStyle(data[j].name, alpha[i]);
+                                                if (load === true) {
+                                                    result += "<div class='mn-item-child'>";
+                                                    result += "<a href="+'<?= $getBrandUrl ?>' + data[j].url_key+">";
+                                                    result += "<span class='brand-name brand-name-only'>"+data[j].name;
+                                                    if (isShowTotalProduct) {
+                                                        result += "(" + data[j].summary + ")";
+                                                    }
+                                                    result += "</span></a></div>";
+                                                }
+                                            }
+                                            result += "</div>";
+                                        }
+                                    }
+                                }
+                            }else{
+                                for (var i = 0; i < rev.length; i++) {
+                                    var check = onCheckFirstBrand(rev[i],data);
+                                    if (check == true) {
+                                        if (isShow == 0) {
+                                            result += "<div class='mn-item'>";
+                                            result += "<div class='mn-item-title'>" + rev[i] + "</div>";
+                                            for(var j = 0;j<data.length;j++){
+                                                var load = getBrandsStyle(data[j].name, rev[i]);
+                                                if (load === true) {
+                                                    result += "<div class='mn-item-child'>";
+                                                    result += "<a href="+'<?= $getBrandUrl ?>' + data[j].url_key+">";
+                                                    result += "<span class='brand-name brand-name-only'>"+data[j].name;
+                                                    if (isShowTotalProduct) {
+                                                        result += "(" + data[j].summary + ")";
+                                                    }
+                                                    result += "</span></a></div>";
+                                                }
+                                            }
+                                            result += "</div>";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else {
+                        result = "No result";
+                    }
+                    $(".mn-items-content").hide();
+                    $("#brandlist-title").text("Search result for '"+key+"'");
+                    $("#showAllBrandOther").hide();
+                    $("#showAllBrand").css({"display":"flex","flex":"wrap"});
+                    $("#showAllBrand").html(result);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+            $("#brandsearch").change(function(){
+                if($("#brandsearch").val()==""){
+                    $("#brandlist-title").text("<?= $block->getTitleListBrand(); ?>");
+                    $("#showAllBrand").hide();
+                    $("#showGroupBrand").hide();
+                    $("#showAllBrandOther").css({"display":"flex","flex":"wrap"});
+                }
+            });
+        });
+        $("#brandsearch").keyup(function(e){
+            if(e.keyCode == 13)
+            {
+                $(this).trigger("enterKey");
+            }
+        });
+        $('body').on('click', '#load-item', function () {
+            $('#brandlist-search').trigger('click');
+        });
+    });
+</script>

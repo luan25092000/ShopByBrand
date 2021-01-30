@@ -1,0 +1,72 @@
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Featured\View\Listing
+ */
+?>
+<?php
+$show = $block->getFeaturedConfig();
+$listIds = $block->getListId();
+$title = $block->getTitleProduct();
+
+?>
+
+<?php if ($listIds) : ?>
+    <?php if ($title) : ?>
+        <h3><?php echo $title ?></h3>
+    <?php endif; ?>
+
+    <div class="mn-brand-carousel">
+        <div class="owl-carousel featured-product" data-margin="10"
+             data-responsive='{"0":{"items":1},"480":{"items":2},"600":{"items":3},"992":{"items":4}}'
+             data-autoplayTimeout="600" data-autoplay="false"
+             data-loop="<?php echo count($listIds) > 6 ? true : false ?>">
+            <?php foreach ($listIds as $listId) : ?>
+                <div class="mn-item">
+                    <?php if ($show == 1) :
+                        /** @var \Magento\Catalog\Model\Product $product */
+                        $product = $block->getItems($listId);
+                        $productImage = $block->getProductImage($product, 'category_page_grid');
+                        ?>
+
+                        <div class="product-item-info " data-container="product-grid">
+                            <a href="<?php echo $product->getProductUrl() ?>"
+                               class="product photo product-item-photo"
+                               tabindex="-1">
+                                <span class="product-image-container">
+                                    <span class="product-image-wrapper">
+                                    <?php echo $productImage->toHtml(); ?></span>
+                                </span>
+                            </a>
+                            <div class="product details product-item-details">
+                                <strong class="product name product-item-name">
+                                    <a class="product-item-link" href="<?php echo $product->getProductUrl() ?>">
+                                        <?php echo $block->getNameProduct($listId); ?>
+                                    </a>
+                                </strong>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<script>
+    require([
+        'jquery',
+        'Magenest_ShopByBrand/js/owl.carousel'
+    ], function ($) {
+        $(".mn-brand-carousel .featured-product").each(function (index, el) {
+            var check = <?php echo(count($listIds) > 6 ? "true" : "false")?>;
+            var config = $(this).data();
+            config.nav = true;
+            config.navText = ['', ''];
+            config.dots = false;
+            config.smartSpeed = "800";
+            $(this).owlCarousel(config);
+        });
+    });
+</script>

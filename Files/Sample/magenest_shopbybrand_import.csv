@@ -1,0 +1,4 @@
+store,products,name,url_key,description,logo,banner,page_title,meta_keywords,meta_description,groups,status,featured,logo_brand_detail,short_description_hover,related_brand
+1,"1,2,3",Brand1,brand1,<p><span>Brand description</span></p>,/b/r/brand1.jpg,/b/r/brand1.jpg,Page Title,Meta keywords,Meta description,"1,2",1,1,/b/r/brand1.jpg,Short Description Hover,"1,2"
+1,"4,5,6,7",Brand2,brand2,<p><span>Brand description</span></p>,/b/r/brand2.jpg,/b/r/brand2.jpg,Page Title,Meta keywords,Meta description,"4,5,6,7",1,1,/b/r/brand2.jpg,Short Description Hover,"1,2"
+

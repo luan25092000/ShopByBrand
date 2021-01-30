@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="Magenest_ShopByBrand::js/brand/info.js"/>
+    </head>
+    <body>
+        <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+        <referenceBlock name="wishlist_sidebar" remove="true"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+
+        <referenceContainer name="content">
+            <block class="Magenest\ShopByBrand\Block\Brand\Index\Info" name="brand_page_info" template="Magenest_ShopByBrand::brand/index/info.phtml" cacheable="false">
+                <block class="Magenest\ShopByBrand\Block\Brand\Index\Listing" name="brand_page_search" template="Magenest_ShopByBrand::brand/index/search.phtml" cacheable="false"/>
+            </block>
+            <block class="Magenest\ShopByBrand\Block\Featured\Index\Listing" name="brand_featured_list_carousel" cacheable="false"/>
+            <block class="Magenest\ShopByBrand\Block\Brand\Index\Listing" name="brand_page_list_filter_row" template="Magenest_ShopByBrand::brand/index/brandlist.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>
+
+
+
+

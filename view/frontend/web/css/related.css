@@ -1,0 +1,13 @@
+.related-brand-wrapper-child{
+    list-style-type: none;
+}
+.related-brand-item{
+    width:152px;
+    height:152px;
+    margin-bottom: 10%;
+    display: inline-block;
+    width: 20%;
+}
+.related-brand-info{
+    width: 152px;
+}

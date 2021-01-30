@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="Magenest\ShopByBrand\Block\Widget\ListBrand" id="list_brand">
+        <label>List Brand</label>
+        <description></description>
+        <parameters>
+            <parameter name="number_of_brand" sort_order="10" xsi:type="select" visible="true" required="true"
+                       source_model="Magenest\ShopByBrand\Model\Brand\Number">
+                <label translate="true">Number of Brand</label>
+            </parameter>
+            <parameter name="brand_sort_by" xsi:type="select" visible="true" sort_order="20"
+                       source_model="Magenest\ShopByBrand\Model\Brand\SortBy">
+                <label translate="true">Sort Brand By</label>
+            </parameter>
+            <parameter name="brand_slider" xsi:type="select" visible="false" sort_order="30"
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Display as Slider</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

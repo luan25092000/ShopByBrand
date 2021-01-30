@@ -1,0 +1,41 @@
+<?php
+/**
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Featured\Index\Related
+ */
+?>
+<?php if (!empty($block->getRelatedBrand())): ?>
+    <div class="block-title title">
+        <h3 id="block-upsell-heading" role="heading"
+            aria-level="2"><?= __("Related Brands") ?></h3>
+    </div>
+    <div class="related-brand-wrapper">
+        <ol class="related-brand-wrapper-child">
+            <?php foreach ($block->getRelatedBrand() as $item): ?>
+                <?php
+                $brandModel = $block->getBrandModelById($item);
+                ?>
+                <?php  if (is_numeric($brandModel->getBrandId())==1): ?>
+                    <li class="related-brand-item" id="<?= $brandModel->getBrandId() ?>">
+                        <div class="related-brand-info">
+                            <div class="related-brand-img">
+                                <a href="<?= $block->getBaseUrl() . $block->getUrlKey() . "/" . $brandModel->getData('url_key') ?>"
+                                   class="related-item-photo">
+                                    <div class="related-brand-image-container">
+                                        <div class="related-brand-image-wrapper">
+                                            <img class="related-brand-image-photo"
+                                                 src="<?= $block->getPathUrlImage($brandModel->getData('logo')); ?>" />
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="related-brand-details">
+                                <p><?= $brandModel->getData('short_description_hover');?></p>
+                            </div>
+                        </div>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<?php endif; ?>

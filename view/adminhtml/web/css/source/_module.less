@@ -1,0 +1,19 @@
+@brand-icons-admin__font-name-path: 'Magenest_ShopByBrand::fonts/Glyphter';
+@brand-icons-admin__font-name : 'Glyphter';
+
+.lib-font-face(
+  @family-name: @brand-icons-admin__font-name,
+  @font-path: @brand-icons-admin__font-name-path,
+  @font-weight: normal,
+  @font-style: normal
+);
+
+.admin__menu .item-brand.parent.level-0 > a:before,
+.admin__menu .item-brand.level-0 > a:before {
+  font-family: @brand-icons-admin__font-name;
+  font-size: 3.5rem;
+  line-height: 2px;
+  content: "\0042";
+  padding: 16px 0;
+  margin: 0 auto 0.5rem;
+}

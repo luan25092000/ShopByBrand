@@ -1,0 +1,38 @@
+@brand-item-width:100/6%;
+@color-desription: #57575c;
+@banner-height: 330px;
+@brand_list_height: 940px;
+@import "pages/_brand.less";
+@import "pages/_brand_detail.less";
+& when (@media-common = true){
+    .custom-tooltip {
+        .lib-tooltip(top);
+    }
+    .shopbybrand_icon{
+        .custom-tooltip{
+            img{
+                width: 75px;
+                height: 75px;
+                object-fit: cover;
+            }
+        }
+    }
+    *{
+        box-sizing: border-box;
+    }
+    .owl-dots{
+        text-align: center;
+        margin-top: 30px;
+        .owl-dot{
+            display: inline-block;
+            margin:0 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: @color-gray76;
+            &.active{
+                background-color: @color-gray46;
+            }
+        }
+    }
+}

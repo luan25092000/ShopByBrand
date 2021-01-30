@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_Swatches::css/swatches.css"/>
+    </head>
+    <body>
+        <attribute name="class" value="page-with-filter"/>
+        <referenceContainer name="sidebar.main">
+            <block class="Magenest\ShopByBrand\Block\Navigation\Custnavigation" name="custom.leftnav" before="-" template="Magenest_ShopByBrand::layer/view.phtml">
+                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="catalog.navigation.state" as="state"/>
+                <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="catalog.navigation.renderer" as="renderer" template="Magento_LayeredNavigation::layer/filter.phtml">
+                    <arguments>
+                        <argument name="product_layer_view_model" xsi:type="object">Magenest\ShopByBrand\ViewModel\Layer\Filter</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+
+        <referenceBlock name="catalog.compare.sidebar"/>
+        <referenceBlock name="wishlist_sidebar"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceContainer name="page.top">
+            <block class="Magenest\ShopByBrand\Block\Brand\View\Info" name="brand_page_info2" template="Magenest_ShopByBrand::brand/view/info.phtml"/>
+            <block class="Magenest\ShopByBrand\Block\Featured\View\Listing" name="products_featured_list_carousel"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Catalog\Block\Product\ListProduct" name="listing" template="Magenest_ShopByBrand::product/list.phtml">
+                <container name="category.product.list.additional" as="additional"/>
+                <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+                    <block class="Magento\Framework\View\Element\Template" as="default"/>
+                </block>
+                <block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable"
+                       name="category.product.type.details.renderers.configurable" as="configurable"
+                       template="Magento_Swatches::product/listing/renderer.phtml"
+                       ifconfig="catalog/frontend/show_swatches_in_product_list">
+                    <arguments>
+                        <argument name="configurable_view_model" xsi:type="object">Magenest\ShopByBrand\ViewModel\Product\Renderer\Configurable</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
+                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+                </block>
+                <action method="setToolbarBlockName">
+                    <argument name="name" xsi:type="string">product_list_toolbar</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="main.content">
+            <block class="Magenest\ShopByBrand\Block\Featured\Index\Related" name="catalog.brand.related" template="Magenest_ShopByBrand::featured/index/related.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

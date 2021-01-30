@@ -1,0 +1,67 @@
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Brand\View\Info
+ */
+?>
+<?php
+$data = $block->getBrandInfo();
+$description = $block->getDescription($data['description']);
+?>
+
+<div class="brand-info-detail">
+    <?php if ($data['banner']): ?>
+        <div id="banner-detail">
+            <img id="img-banner" src="<?php echo $data['banner'] ?>">
+        </div>
+    <?php endif; ?>
+    <div id="img-logo">
+        <?php if ($data['logo_brand_detail']) : ?>
+            <div>
+                <img id="img-white" src="<?php echo $data['logo_brand_detail'] ?>">
+            </div>
+        <?php else : ?>
+            <div>
+                <p id="brand-name-view"><?php echo $data['name'] ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="box-content">
+        <div class="brand-detail-description">
+            <p><?php echo $description ?></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        $(window).scroll(function () {
+            var left_fix = $('#show-learn-more').width() / 2 - 15;
+            var banner_detail = $('#banner-detail').offset();
+            var show_learn_more = $('#show-learn-more').offset();
+            if (banner_detail) {
+                if (show_learn_more) {
+                    var banner_detail_top = banner_detail['top'];
+                    var show_learn_more_top = show_learn_more['top'];
+                    if ($(this).scrollTop() >= banner_detail_top + $('#banner-detail').height() - 50
+                        && $(this).scrollTop() <= (show_learn_more_top - 130 + $('.brand-detail-description').height())) {
+                        $('.closer').attr('id', 'closer-description');
+                        $('.closer').css('position', 'fixed');
+                        $('.closer').css("left", left_fix);
+                        $('.closer').css("top", '100px');
+                    } else {
+                        $('.closer').attr('id', '');
+                        $('.closer').css('position', '');
+                        $('.closer').css("left", '');
+                        $('.closer').css("top", '');
+                    }
+                }
+            }
+        });
+
+    })
+
+</script>

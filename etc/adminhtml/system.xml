@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magenest" translate="label" sortOrder="100">
+            <label> Magenest</label>
+        </tab>
+        <section id="shopbybrand" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Shop By Brand</label>
+            <tab>magenest</tab>
+            <resource>Magenest_ShopByBrand::setting</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+                <field id="menu_link" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Add all brand page link to menu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title_menu" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Menu Title</label>
+                    <comment>If title menu empty then show Brands</comment>
+                </field>
+                <field id="icon_brand" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Display brand icons in product listing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="show" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show brands in product page</label>
+                    <source_model>Magenest\ShopByBrand\Model\Config\Product</source_model>
+                </field>
+            </group>
+            <group id="brandpage" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>All Brand Page Setup</label>
+                <field id="title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Search Brand Page Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="featured_brand" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Display Featured Brands </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show featured brands on the brand home page</comment>
+                </field>
+                <field id="title_brand" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Title of Featured Brands</label>
+                </field>
+                <field id="title_list_brand" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Title Of Brand List</label>
+                </field>
+                <field id="show_list_brand" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show brands list in product page</label>
+                    <source_model>Magenest\ShopByBrand\Model\Config\DisplayMode</source_model>
+                </field>
+                <field id="total_product" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show Product Quantity Of Each Brand</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show total product of brands on the brand home page</comment>
+                </field>
+                <field id="sort_order_list_brand" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Sort order brands list in product page</label>
+                    <source_model>Magenest\ShopByBrand\Model\Config\SortOrderBrandList</source_model>
+                </field>
+            </group>
+            <group id="product" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Brand Detail Page Setup</label>
+                <field id="featured_product" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Display Featured Products </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title_product" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Title Of Featured Product </label>
+                </field>
+            </group>
+            <group id="page" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>All Brand Page Setup</label>
+                <field id="url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>URL key</label>
+                    <validate>required-entry letters-only</validate>
+                </field>
+                <field id="keywords" translate="label" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Meta keywords</label>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Meta description</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

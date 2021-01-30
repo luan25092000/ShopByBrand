@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_catalog_product_save_entity_after">
+        <observer name="product_save_brands" instance="Magenest\ShopByBrand\Observer\Brand\ProductSaveAfter" />
+    </event>
+    <event name="store_add">
+        <observer name="add_url_rewrite" instance="Magenest\ShopByBrand\Observer\Brand\AddUrl" />
+    </event>
+    <event name="admin_system_config_changed_section_shopbybrand">
+        <observer name="custom_admin_system_config_changed_section_general" instance="Magenest\ShopByBrand\Observer\Brand\ConfigObserver"/>
+    </event>
+    <event name="catalog_product_import_bunch_save_after">
+        <observer name="catalog_product_import_bunch_save_after_brands" instance="Magenest\ShopByBrand\Observer\Product\AfterImport"/>
+    </event>
+</config>

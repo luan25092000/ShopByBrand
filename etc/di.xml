@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magenest. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ *
+ * Magenest_ShopByBrand extension
+ * NOTICE OF LICENSE
+ *
+ * @category  Magenest
+ * @package   Magenest_ShopByBrand
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magenest\ShopByBrand\Model\ResourceModel\Grid\Brand" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magenest_shop_brand</argument>
+            <argument name="resourceModel" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Brand</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magenest\ShopByBrand\Model\ResourceModel\Grid\Group" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magenest_brand_group</argument>
+            <argument name="resourceModel" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Group</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magenest\ShopByBrand\Model\ResourceModel\Grid\Rewrite" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magenest_brand_rewrite</argument>
+            <argument name="resourceModel" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Group</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="shopbybrand_brand_listing_data_source" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Grid\Brand</item>
+                <item name="shopbybrand_group_listing_data_source" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Grid\Group</item>
+                <item name="shopbybrand_rewrite_listing_data_source" xsi:type="string">Magenest\ShopByBrand\Model\ResourceModel\Grid\Rewrite</item>
+            </argument>
+        </arguments>
+    </type>
+    <type	name="Magento\Theme\Block\Html\Topmenu">
+        <plugin	name="add_brand_menu" type="Magenest\ShopByBrand\Plugin\TopMenu"   disabled="false" />
+    </type>
+
+
+    <!-- Magento only includes 2 type of layer resolvers i.e Category and search whereas our custom page is neither a category page nor a search page so we need to add a new layer resolver on our custom page-->
+    <type name="Magento\Catalog\Model\Layer\Resolver">
+        <arguments>
+            <argument name="layersPool" xsi:type="array">
+                <item name="category" xsi:type="string">Magento\Catalog\Model\Layer\Category</item>
+                <item name="search" xsi:type="string">Magento\Catalog\Model\Layer\Search</item>
+                <item name="customlayer" xsi:type="string">Magenest\ShopByBrand\Model\Layer</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- To prepare the filterlist for our custom collection which would be passed to the left navigation we need below virtual types for our custom page navigation -->
+    <virtualType name="customFilterList" type="Magenest\ShopByBrand\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\Catalog\Model\Layer\Category\FilterableAttributeList</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- once the filter list virtual type is ready we can pass the same to our navigation , I have prepared the virtual type of the core navigation for my custom module and have passed the custom filter list to it -->
+    <virtualType name="Magenest\ShopByBrand\Block\Navigation\Custnavigation" type="Magento\LayeredNavigation\Block\Navigation">
+        <arguments>
+            <argument name="filterList" xsi:type="object">customFilterList</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- As we will be modifying the layer model collection we will need to extend the core model layer, Below virtual type will be required to extend the Catalog model layer else it will throw error for the context in construct method-->
+    <virtualType name="Magenest\ShopByBrand\Model\Layer\Context" type="Magento\Catalog\Model\Layer\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magenest\ShopByBrand\Model\Layer\Brand\ItemCollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magenest\ShopByBrand\Model\Layer\Brand\StateKey</argument>
+            <argument name="collectionFilter" xsi:type="object">Magenest\ShopByBrand\Model\Layer\Brand\CollectionFilter</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magenest\ShopByBrand\Model\Layer">
+        <arguments>
+            <argument name="context" xsi:type="object">Magenest\ShopByBrand\Model\Layer\Context</argument>
+        </arguments>
+    </type>
+
+    <!-- register the sample file -->
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="magenest_shopbybrand_import" xsi:type="string">Magenest_ShopByBrand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

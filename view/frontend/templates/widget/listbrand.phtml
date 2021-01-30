@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @var $block Magenest\ShopByBrand\Block\Widget\ListBrand
+ */
+
+$datas = $block->getBrands();
+$baseBrandUrl = $block->getBaseBrandUrl();
+$baseImageUrl = $block->getBaseImageUrl();
+?>
+
+<div class="mn-brand-carousel">
+    <center>
+    <div class="owl-carousel" data-margin="10"
+         data-responsive='{"0":{"items":2},"480":{"items":2},"600":{"items":4},"992":{"items":6}}'
+         data-autoplayTimeout="600" data-autoplay="false" data-loop="<?php echo count($datas) > 6 ? true : false ?>">
+        <?php foreach ($datas as $brand) : ?>
+            <div class="mn-item" style="border-color: white;">
+                <a href='<?php echo $baseBrandUrl . '/' . $brand['url_key'] ?>' class="brand-img">
+                    <img style="height: 120px" src='<?php echo $block->getImage($brand) ?>' alt='<?php echo $brand['name'] ?>' title='<?php echo $brand['name'] ?>' >
+                </a>
+                <a href='<?php echo $baseBrandUrl . '/' . $brand['url_key'] ?>' class="brand-name">
+                    <b><?php echo $brand['name'] ?></b>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    </center>
+</div>
+
+
+<script>
+    require([
+        'jquery',
+        'Magenest_ShopByBrand/js/owl.carousel'
+    ], function ($) {
+        $(".owl-carousel").each(function (index, el) {
+            var check = <?php echo (count($datas) > 6 ? "true" : "false")?>;
+            var config = $(this).data();
+            if(check === true){
+                config.nav = true;
+            }
+            config.navText = ['', ''];
+            config.dots = false;
+            config.smartSpeed = "800";
+            $(this).owlCarousel(config);
+        });
+    });
+</script>
+

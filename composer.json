@@ -1,0 +1,21 @@
+{
+  "name": "magenest/module-shop-by-brand",
+  "description": "Shop By Brand extension by Magenest",
+  "require": {
+  		"magenest/core": "*"
+   },
+  "type": "magento2-module",
+  "version": "101.4.0",
+  "license": [
+    "OSL-3.0",
+    "proprietary"
+  ],
+  "autoload": {
+    "files": [
+    	"registration.php"
+    ],
+    "psr-4": {
+      "Magenest\\ShopByBrand\\": ""
+    }
+  }
+}

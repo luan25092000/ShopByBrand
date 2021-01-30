@@ -1,0 +1,27 @@
+<?php
+/**
+ * @var $block \Magenest\ShopByBrand\Plugin\TopMenu
+ */
+
+$collection = $block->isShowBrand();
+$brandUrl = $block->getBrandUrl();
+$title = $block->getTitleMenu();
+?>
+<?php if (count($collection->getData())) : ?>
+    <li class="level0 last level-top parent ui-menu-item">
+        <a class="level-top ui-corner-all" href="<?php echo $brandUrl ?>"><?php echo $title ? $title : "Brands" ?></a>
+        <ul class="level0 submenu">
+            <div
+                <?php if (count($collection->getData()) > 9) : ?>
+                    style="height:330px; overflow: auto"
+                <?php endif; ?>
+            >
+                <?php foreach ($collection as $brand) : ?>
+                    <li>
+                        <a href="<?php echo $brandUrl . "/" . $brand->getData('url_key') ?>"><?php echo $brand->getName() ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </div>
+        </ul>
+    </li>
+<?php endif; ?>

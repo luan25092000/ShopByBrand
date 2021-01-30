@@ -1,0 +1,397 @@
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magenest\ShopByBrand\Block\Brand\Index\Listing
+ */
+?>
+<?php
+$brandUrl = $block->getBrandUrl();
+$imageUrl = $block->getImageUrl();
+$allBrand = $block->getAllBrand();
+$revAllBrand = $block->getRevAllBrand();
+$showTotalProduct = $block->getShowTotalBrandProduct();
+$routeFrontName = $block->getRouteFrontName();
+$helper = $this->helper('Magenest\ShopByBrand\Helper\ConfiguredPrice');
+$alpha = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+$rev = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 1, 2, 3, 4, 5, 6, 7, 8, 9];
+?>
+<h3 id="brandlist-title"><?= $block->getTitleListBrand(); ?></h3>
+<div class="mn-view-list mn-view-list_style1" id="showAllBrand">
+    <?php if ($block->isSortOrderListBrand() == 0): ?>
+        <?php for ($i = 0; $i < count($alpha); $i++) : ?>
+            <?php $data = $block->checkFirstBrand($alpha[$i]);
+            if ($data == 1) : ?>
+                <?php if ($block->showBrandList() == 0): ?>
+                    <div class="mn-item">
+                        <div class="mn-item-title"><?= $alpha[$i] ?></div>
+                        <?php foreach ($allBrand as $brand) : ?>
+                            <?php $load = $block->getBrandsStyle($brand['name'], $alpha[$i]);
+                            if ($load == true) : ?>
+                                <div class="mn-item-child">
+                                    <a href='<?php echo $brandUrl . $brand['url_key'] ?>'
+                                       class="brand-name brand-name-only">
+                                        <span>
+                                            <?php echo $brand['name']?>
+                                            <?php if ($showTotalProduct) { ?>
+                                                <?php echo "(" . $brand['summary'] . ")" ?>
+                                            <?php } ?>
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endfor; ?>
+        <?php if ($block->showBrandList() == 1): ?>
+            <?php foreach ($allBrand as $brand) : ?>
+                <div class="mn-item">
+                    <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                        <img src='<?php echo $block->getImage($brand) ?>'
+                             alt='<?php echo $brand['name'] ?>'
+                             title='<?php echo $brand['name'] ?>'
+                             class="brand-img">
+                        <span class="brand-name">
+                                        <?php echo $brand['name'] ?>
+                                        <?php if ($showTotalProduct) { ?>
+                                            <?php echo "(" . $brand['summary'] . ")" ?>
+                                        <?php } ?>
+                            </span>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+    <?php else: ?>
+        <?php for ($i = 0; $i < count($rev); $i++) : ?>
+            <?php $data = $block->checkFirstBrand($rev[$i]);
+            if ($data == 1) : ?>
+                <?php if ($block->showBrandList() == 0): ?>
+                    <div class="mn-item">
+                        <div class="mn-item-title"><?= $rev[$i] ?></div>
+                        <?php foreach ($allBrand as $brand) : ?>
+                            <?php $load = $block->getBrandsStyle($brand['name'], $rev[$i]);
+                            if ($load == true) : ?>
+                                <div class="mn-item-child">
+                                    <a href='<?php echo $brandUrl . $brand['url_key'] ?>'
+                                       class="brand-name brand-name-only">
+                                        <span>
+                                            <?php echo $brand['name']?>
+                                            <?php if ($showTotalProduct) { ?>
+                                                <?php echo "(" . $brand['summary'] . ")" ?>
+                                            <?php } ?>
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endfor; ?>
+        <?php if ($block->showBrandList() == 1): ?>
+            <?php if ($block->isSortOrderListBrand() == 0): ?>
+                <?php foreach ($allBrand as $brand) : ?>
+                    <div class="mn-item">
+                        <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                            <img src='<?php echo $block->getImage($brand) ?>'
+                                 alt='<?php echo $brand['name'] ?>'
+                                 title='<?php echo $brand['name'] ?>'
+                                 class="brand-img">
+                            <span class="brand-name">
+                                                <?php echo $brand['name'] ?>
+                                                <?php if ($showTotalProduct) { ?>
+                                                    <?php echo "(" . $brand['summary'] . ")" ?>
+                                                <?php } ?>
+                                    </span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($revAllBrand as $brand) : ?>
+                    <div class="mn-item">
+                        <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                            <img src='<?php echo $block->getImage($brand) ?>'
+                                 alt='<?php echo $brand['name'] ?>'
+                                 title='<?php echo $brand['name'] ?>'
+                                 class="brand-img">
+                            <span class="brand-name">
+                                                <?php echo $brand['name'] ?>
+                                                <?php if ($showTotalProduct) { ?>
+                                                    <?php echo "(" . $brand['summary'] . ")" ?>
+                                                <?php } ?>
+                                    </span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<div
+    class="mn-view-list mn-view-list_style1" id="showGroupBrand" hidden="hidden">
+</div>
+
+<div class="mn-view-list mn-view-list_style1" id="showAllBrandOther" style="display:none;">
+    <?php if ($block->isSortOrderListBrand() == 0): ?>
+        <?php for ($i = 0; $i < count($alpha); $i++) : ?>
+            <?php $data = $block->checkFirstBrand($alpha[$i]);
+            if ($data == 1) : ?>
+                <?php if ($block->showBrandList() == 0): ?>
+                    <div class="mn-item">
+                        <div class="mn-item-title"><?= $alpha[$i] ?></div>
+                        <?php foreach ($allBrand as $brand) : ?>
+                            <?php $load = $block->getBrandsStyle($brand['name'], $alpha[$i]);
+                            if ($load == true) : ?>
+                                <div class="mn-item-child">
+                                    <a href='<?php echo $brandUrl . $brand['url_key'] ?>'
+                                       class="brand-name brand-name-only">
+                                        <span>
+                                            <?php echo $brand['name']?>
+                                            <?php if ($showTotalProduct) { ?>
+                                                <?php echo "(" . $brand['summary'] . ")" ?>
+                                            <?php } ?>
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endfor; ?>
+        <?php if ($block->showBrandList() == 1): ?>
+            <?php foreach ($allBrand as $brand) : ?>
+                <div class="mn-item">
+                    <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                        <img src='<?php echo $block->getImage($brand) ?>'
+                             alt='<?php echo $brand['name'] ?>'
+                             title='<?php echo $brand['name'] ?>'
+                             class="brand-img">
+                        <span class="brand-name">
+                                        <?php echo $brand['name'] ?>
+                                        <?php if ($showTotalProduct) { ?>
+                                            <?php echo "(" . $brand['summary'] . ")" ?>
+                                        <?php } ?>
+                            </span>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+    <?php else: ?>
+        <?php for ($i = 0; $i < count($rev); $i++) : ?>
+            <?php $data = $block->checkFirstBrand($rev[$i]);
+            if ($data == 1) : ?>
+                <?php if ($block->showBrandList() == 0): ?>
+                    <div class="mn-item">
+                        <div class="mn-item-title"><?= $rev[$i] ?></div>
+                        <?php foreach ($allBrand as $brand) : ?>
+                            <?php $load = $block->getBrandsStyle($brand['name'], $rev[$i]);
+                            if ($load == true) : ?>
+                                <div class="mn-item-child">
+                                    <a href='<?php echo $brandUrl . $brand['url_key'] ?>'
+                                       class="brand-name brand-name-only">
+                                        <span>
+                                            <?php echo $brand['name']?>
+                                            <?php if ($showTotalProduct) { ?>
+                                                <?php echo "(" . $brand['summary'] . ")" ?>
+                                            <?php } ?>
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endfor; ?>
+        <?php if ($block->showBrandList() == 1): ?>
+            <?php if ($block->isSortOrderListBrand() == 0): ?>
+                <?php foreach ($allBrand as $brand) : ?>
+                    <div class="mn-item">
+                        <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                            <img src='<?php echo $block->getImage($brand) ?>'
+                                 alt='<?php echo $brand['name'] ?>'
+                                 title='<?php echo $brand['name'] ?>'
+                                 class="brand-img">
+                            <span class="brand-name">
+                                                <?php echo $brand['name'] ?>
+                                                <?php if ($showTotalProduct) { ?>
+                                                    <?php echo "(" . $brand['summary'] . ")" ?>
+                                                <?php } ?>
+                                    </span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($revAllBrand as $brand) : ?>
+                    <div class="mn-item">
+                        <a href="<?php echo $brandUrl . $brand['url_key'] ?>">
+                            <img src='<?php echo $block->getImage($brand) ?>'
+                                 alt='<?php echo $brand['name'] ?>'
+                                 title='<?php echo $brand['name'] ?>'
+                                 class="brand-img">
+                            <span class="brand-name">
+                                                <?php echo $brand['name'] ?>
+                                                <?php if ($showTotalProduct) { ?>
+                                                    <?php echo "(" . $brand['summary'] . ")" ?>
+                                                <?php } ?>
+                                    </span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<script>
+    function checkFirstBrand(key, datas) {
+        var n = datas.length;
+        for (var i = 0; i < n; i++) {
+            var name = "" + datas[i].nameUS;
+            var first = name.substr(0, 1).toUpperCase();
+            if (key == first) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function onCheckFirstBrand(key,datas){
+        var n = datas.length;
+        for (var i = 0; i < n; i++) {
+            var name = "" + datas[i].name;
+            var first = name.substr(0, 1).toUpperCase();
+            if (key == first) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getBrandsStyle(datas, key) {
+        var name = "" + datas;
+        if (name.substr(0, 1).toUpperCase() == key) {
+            return true;
+        }
+        return false;
+    }
+
+    function groupId(value) {
+        require(['jquery'], function ($) {
+
+            if (value == "all") {
+                $("#brandlist-title").text("<?= $block->getTitleListBrand(); ?>");
+                $('#showAllBrand').hide();
+                $('#showGroupBrand').hide();
+                $('#showAllBrandOther').css({"display": "flex", "flex": "wrap"});
+                return;
+            }
+
+            var url = '<?php echo $block->getUrl('shopbybrand/brand/showbrandgroup');?>';
+            var param = {group_id: value};
+            var html = "";
+            $.ajax({
+                showLoader: true,
+                url: url,
+                data: param,
+                type: "POST",
+                dataType: 'json'
+            }).done(function (data) {
+                var isSortOrderListBrand = <?=$block->isSortOrderListBrand()?>;
+                var isShow = <?= $block->showBrandList(); ?>;
+                var isShowTotalProduct = <?= $showTotalProduct; ?>;
+                var alpha = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+                var rev = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                var arrBrand = data.message;
+                $('#showAllBrandOther').css("display","none");
+                $('#showAllBrand').hide();
+                $('#showGroupBrand').show();
+                $('#showGroupBrand').html('');
+                if (isSortOrderListBrand == 0) {
+                    for (var i = 0; i < alpha.length; i++) {
+                        var data = checkFirstBrand(alpha[i], arrBrand);
+                        if (data == true) {
+                            if (isShow == 0) {
+                                html += "<div class=\"mn-item\">";
+                                html += "<div class=\"mn-item-title\">" + alpha[i] + "</div>";
+                                var n = arrBrand.length;
+                                for (var j = 0; j < n; j++) {
+                                    var load = getBrandsStyle(arrBrand[j].nameUS, alpha[i]);
+                                    if (load == true) {
+                                        html +=
+                                            "<div class=\"mn-item-child\">" +
+                                            "<a href=\"<?php echo $brandUrl ?>" + arrBrand[j].url_key + "\">" +
+                                            "<span class=\"brand-name brand-name-only\">" + arrBrand[j].name;
+                                        if (isShowTotalProduct) {
+                                            html += "(" + arrBrand[j].summary + ")";
+                                        }
+                                        html += "</span></a></div>";
+                                    }
+                                }
+                                html += "</div>";
+                            }
+                        }
+                    }
+                    if (isShow == 1) {
+                        for (var j = 0; j < arrBrand.length; j++) {
+                            html +=
+                                "<div class=\"mn-item\">"+
+                                "<a href=\"<?php echo $brandUrl ?>" + arrBrand[j].url_key + "\">" +
+                                "<img src='" + arrBrand[j].image_url + "' alt='" + arrBrand[j].name + "' title='" + arrBrand[j].name + "' class=\"brand-img\"/>" +
+                                "<span class=\"brand-name\">" + arrBrand[j].name;
+                            if (isShowTotalProduct) {
+                                html += "(" + arrBrand[j].summary + ")";
+                            }
+                            html += "</span></a></div>";
+                        }
+                    }
+                } else {
+                    for (var i = 0; i < rev.length; i++) {
+                        var data = checkFirstBrand(rev[i], arrBrand);
+                        if (data == true) {
+                            if (isShow == 0) {
+                                html += "<div class=\"mn-item\">";
+                                html += "<div class=\"mn-item-title\">" + rev[i] + "</div>";
+                                for (var j = 0; j < arrBrand.length; j++) {
+                                    var load = getBrandsStyle(arrBrand[j].nameUS, rev[i]);
+                                    if (load == true) {
+                                        html +=
+                                            "<div class=\"mn-item-child\">" +
+                                            "<a href=\"<?php echo $brandUrl ?>" + arrBrand[j].url_key + "\">" +
+                                            "<span class=\"brand-name brand-name-only\">" + arrBrand[j].name;
+                                        if (isShowTotalProduct) {
+                                            html += "(" + arrBrand[j].summary + ")";
+                                        }
+                                        html += "</span></a></div>";
+                                    }
+                                }
+                                html += "</div>";
+                            }
+                        }
+                    }
+                    if (isShow == 1) {
+                        for (var j = 0; j < arrBrand.length; j++) {
+                            html +=
+                                "<div class=\"mn-item\">"+
+                                "<a href=\"<?php echo $brandUrl ?>" + arrBrand[j].url_key + "\">" +
+                                "<img src='" + arrBrand[j].image_url + "' alt='" + arrBrand[j].name + "' title='" + arrBrand[j].name + "' class=\"brand-img\"/>" +
+                                "<span class=\"brand-name\">" + arrBrand[j].name;
+                            if (isShowTotalProduct) {
+                                html += "(" + arrBrand[j].summary + ")";
+                            }
+                            html += "</span></a></div>";
+                        }
+                    }
+                }
+                $('#showGroupBrand').append(html);
+            });
+        });
+    }
+
+</script>

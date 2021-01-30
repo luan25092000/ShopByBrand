@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var $block \Magenest\ShopByBrand\Block\Brand\Index\Info
+ */
+
+$datas = $block->getGroupInfo();
+$baseBrandUrl = $block->getBaseGroupUrl();
+$title = $block->getTitleBrandPage();
+$groupBrandShow = 0;
+
+foreach ($datas as $data) {
+    if ($block->getQtyBrand($data['group_id']) > 0) {
+        $groupBrandShow++;
+    }
+}
+?>
+<div>
+    <?php echo $this->getChildHtml('brand_page_search') ?>
+</div>
